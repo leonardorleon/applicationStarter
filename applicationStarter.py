@@ -9,6 +9,7 @@ import os
 root = tk.Tk()
 apps = []
 
+# if the save.txt file exists in the path of the application, it loads the names on the text file to the app list
 if os.path.isfile('save.txt'):
     with open('save.txt', 'r') as f:
         tempApps = f.read()
@@ -18,17 +19,16 @@ if os.path.isfile('save.txt'):
 # function that opens up a file dialog which lets the user select application files
 def addApp():
     
-    # first destroy any widgets that were previously placed in the frame
+    # first destroy any widgets that were previously placed in the frame so the list is not repeated
     for widget in frame.winfo_children():
         widget.destroy()
     
     filename = filedialog.askopenfilename(initialdir="/usr/share/applications", title="Select file",
                                           filetypes=(("shortcuts","*.desktop"), ("all files","*.*")))
-    # filenames are stored on a list
     filename = filename.split("/")[-1].split(".")[0]
-    print(filename)
-    apps.append(filename)
-    # for each app on the list, place a text label with the filename of the application
+    # filenames are stored on a list
+    if( len(filename) > 0) : apps.append(filename)
+    # write the name of the applications to the frame.
     for app in apps:
         label = tk.Label(frame, text=app, bg="gray")
         label.pack()
@@ -60,8 +60,9 @@ startApps = tk.Button(root, text="Start Applications", padx=10,
                       pady=5, fg="white", bg="#569a40", command=startApps)
 startApps.pack()
 
+# When the program is first loaded, if the save.txt file had names they were loaded to apps. Here we list them on startup
 for app in apps:
-    label = tk.Label(frame, text=app    )
+    label = tk.Label(frame, text=app)
     label.pack()
 
 root.mainloop()
