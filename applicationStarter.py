@@ -3,10 +3,17 @@
 import tkinter as tk
 from tkinter import filedialog, Text
 import subprocess
+import os
 
 # create the base of the GUI
 root = tk.Tk()
 apps = []
+
+if os.path.isfile('save.txt'):
+    with open('save.txt', 'r') as f:
+        tempApps = f.read()
+        tempApps = tempApps.split(',')
+        apps = [x for x in tempApps if x.strip()]
 
 # function that opens up a file dialog which lets the user select application files
 def addApp():
@@ -25,6 +32,7 @@ def addApp():
     for app in apps:
         label = tk.Label(frame, text=app, bg="gray")
         label.pack()
+    
 
 def startApps():
     for app in apps:
@@ -52,4 +60,12 @@ startApps = tk.Button(root, text="Start Applications", padx=10,
                       pady=5, fg="white", bg="#569a40", command=startApps)
 startApps.pack()
 
+for app in apps:
+    label = tk.Label(frame, text=app    )
+    label.pack()
+
 root.mainloop()
+
+with open('save.txt', 'w') as f:
+    for app in apps:
+        f.write(app + ',')
